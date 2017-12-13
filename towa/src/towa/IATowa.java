@@ -109,7 +109,12 @@ public class IATowa {
                 } else if (!fin) {
                     System.out.println("L'adversaire joue : "
                             + action + ligne + colonne + ".");
-                    // TODO : mettre à jour le plateau
+                    if(action=='P'){
+                        ajoutPose(ligne,colonne);
+                    }
+                    else{
+                        activation(ligne,colonne);
+                    }
                 }
             }
 
@@ -124,6 +129,12 @@ public class IATowa {
         }
     }
 
+    void ajoutPose(Case[][] plateau, int ligne, int colonne, int ordreCourant){
+        plateau[ligne][colonne].tourPresente=true;
+        if(ordreCourant==1){
+        plateau[ligne][colonne].estNoire=true;
+        }
+    }
     /**
      * Fonction exécutée lorsque c'est à notre tour de jouer. Cette fonction
      * envoie donc l'action choisie au serveur.
