@@ -85,7 +85,7 @@ public class JoueurTowa implements IJoueurTowa {
                 }
             }
         }
-        
+
         System.out.println("actionsPossibles : fin");
         return Utils.nettoyerTableau(actions);
     }
@@ -352,32 +352,35 @@ public class JoueurTowa implements IJoueurTowa {
     }
 
     /**
-     * Parcours une ligne ou une colonne en fonction de ses paramètres et renvoie le nombre de pions de la première tour rencontrée ainsi que leur couleur.
+     * Parcours une ligne ou une colonne en fonction de ses paramètres et renvoie la ligne et la colonne de la première tour rencontrée ainsi que sa couleur.
      *
      * @param plateau le plateau
      * @param ligDepart indice de la ligne de départ
      * @param colDepart indice de la colonne de départ
      * @param incremLig incrément pour les lignes
      * @param incremCol incrément pour les colonnes
-     * @return un nombre de pions négatif si noirs, positif si blancs, nul si aucune tour n'est présente sur la ligne/colonne.
+     * @return un tableau contenant la ligne, la colonne et la couleur (1 pour noir, 2 pour blanc)
      */
-    int parcoursGrille(Case[][] plateau, int ligDepart, int colDepart, int incremLig, int incremCol) {
+    int[] parcoursGrille(Case[][] plateau, int ligDepart, int colDepart, int incremLig, int incremCol) {
         boolean tourAtteinte = false;
-        int nbPions = 0; //Négatif si noir, positif si blanc
+        int[] tourTrouvee = new int[3]; //Négatif si noir, positif si blanc
         while (caseExiste(ligDepart, colDepart) && !tourAtteinte) {
             if (plateau[ligDepart][colDepart].tourPresente) {
                 tourAtteinte = true;
+                tourTrouvee[0] = ligDepart;
+                tourTrouvee[1] = colDepart;
                 if (plateau[ligDepart][colDepart].estNoire) {
-                    nbPions -= plateau[ligDepart][colDepart].hauteur;
+                    tourTrouvee[2] = 1;
                 } else {
-                    nbPions += plateau[ligDepart][colDepart].hauteur;
+
+                    tourTrouvee[2] = 2;
                 }
 
             }
             ligDepart += incremLig;
             colDepart += incremCol;
         }
-        return nbPions;
+        return tourTrouvee;
     }
 
     /**
@@ -447,7 +450,7 @@ public class JoueurTowa implements IJoueurTowa {
      * @param estNoir couleur du joueur
      * @return true si la case est vide et qu'il y a une tour ennemie adjacente.
      */
-    boolean doublePose(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
+    public boolean doublePose(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
         if ((!plateau[ligne][colonne].tourPresente && adjacent(plateau, ligne, colonne, estNoir)) && plateau[ligne][colonne].altitude <= 2) {
             return true;
         } else {
@@ -494,12 +497,12 @@ public class JoueurTowa implements IJoueurTowa {
      * @param apresPose true si on fait une vérification après pose du pion, false sinon
      * @return true si il est couvrant, false sinon
      */
-    boolean couvrant(Case[][] plateau, int ligne, int colonne, boolean joueurNoir,boolean apresPose) {
+    boolean couvrant(Case[][] plateau, int ligne, int colonne, boolean joueurNoir, boolean apresPose) {
         boolean estCouvrant = true;
         int lig = 0;
         int col = 0;
         while (caseExiste(lig, col) && estCouvrant) {
-            if (!ligneCouvrante(plateau, lig,ligne,colonne,joueurNoir, apresPose) || !colonneCouvrante(plateau, col,ligne,colonne,joueurNoir,apresPose)) {
+            if (!ligneCouvrante(plateau, lig, ligne, colonne, joueurNoir, apresPose) || !colonneCouvrante(plateau, col, ligne, colonne, joueurNoir, apresPose)) {
                 estCouvrant = false;
             } else {
                 lig++;
@@ -511,6 +514,7 @@ public class JoueurTowa implements IJoueurTowa {
 
     /**
      * Vérifie si la ligne est couvrante.
+     *
      * @param plateau le plateau
      * @param ligne la ligne dont on veut vérifier si elle est couvrante
      * @param ligPose la ligne de la pose
@@ -548,6 +552,7 @@ public class JoueurTowa implements IJoueurTowa {
 
     /**
      * Vérifie si la colonne est couvrante.
+     *
      * @param plateau le plateau
      * @param colonne la colonne dont on veut vérifier si elle est couvrante
      * @param ligPose la ligne de la pose
@@ -608,7 +613,7 @@ public class JoueurTowa implements IJoueurTowa {
                 }
 
             } else {
-                if (!couvrant(plateau, ligne, colonne,estNoir, false) && couvrant(plateau, ligne, colonne, estNoir, true)) {
+                if (!couvrant(plateau, ligne, colonne, estNoir, false) && couvrant(plateau, ligne, colonne, estNoir, true)) {
                     nbPionsPoseN += 4 - niveau(plateau, ligne, colonne);
                 } else {
                     nbPionsPoseN++;
@@ -623,7 +628,7 @@ public class JoueurTowa implements IJoueurTowa {
                     nbPionsPoseB += 2;
                 }
             } else {
-                if (!couvrant(plateau, ligne, colonne,estNoir, false) && couvrant(plateau, ligne, colonne, estNoir, true)) {
+                if (!couvrant(plateau, ligne, colonne, estNoir, false) && couvrant(plateau, ligne, colonne, estNoir, true)) {
                     nbPionsPoseB += 4 - niveau(plateau, ligne, colonne);
                 } else {
                     nbPionsPoseB++;
