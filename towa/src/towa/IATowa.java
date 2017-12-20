@@ -167,40 +167,10 @@ public class IATowa {
         carreActivationEnnemi(plateau, ligne, colonne, estNoir, hauteur);
     }
 
-    String activationPerso(Case[][] plateau, int ligne, int colonne, int nbPionsNoirs, int nbPionsBlancs) {
-        boolean estNoir = ordre == 1;
-        int pionsDétruits = 0;
-        int hauteur = plateau[ligne][colonne].hauteur;
-        int[][] toursLig = parcoursGrillePerso(plateau, ligne, 0, 0, 1, estNoir, hauteur);
-        int tailleLig = toursLig.length;
-        int[][] toursCol = parcoursGrillePerso(plateau, 0, colonne, 1, 0, estNoir, hauteur);
-        int tailleCol = toursCol.length;
-        int[][] toursDiag = carreActivationPerso(plateau, ligne, colonne, estNoir, hauteur);
-        int tailleDiag = toursDiag.length;
-        for (int i = 0; i < tailleLig; i++) {
-            pionsDétruits += plateau[ligne][toursLig[i][1]].hauteur;
-        }
-        for (int i = 0; i < tailleCol; i++) {
-            pionsDétruits += plateau[ligne][toursLig[i][1]].hauteur;
-        }
-        for (int i = 0; i < tailleDiag; i++) {
-            pionsDétruits += plateau[ligne][toursLig[i][1]].hauteur;
-        }
-        int nbPionsActiveN = nbPionsNoirs;
-        int nbPionsActiveB = nbPionsBlancs;
-        // si activation d'un pion : détection des pions de la couleur opposée et de niveau strictement inférieur à la tour activée, 
-        // puis destruction sur la ligne/colonne du pion de couleur opposée le plus proche et tous les pions de couleur opposée sur les diagonales correspondantes à la case activée
-        if (estNoir) {
-            nbPionsActiveB -= pionsDétruits;
-        } else {
-            nbPionsActiveN -= pionsDétruits;
-        }
-
+    String activationPerso(Case[][] plateau, int ligne, int colonne) {
         String action = "A" // action = Activation
                 + Utils.numVersCarLigne(ligne) // convertit la ligne en lettre
-                + Utils.numVersCarColonne(colonne) // convertit la colonne en lettre
-                + "," + nbPionsActiveN // nombre de pions noirs
-                + "," + nbPionsActiveB; // nombre de pions blancs
+                + Utils.numVersCarColonne(colonne);
         return action;
     }
 
@@ -510,10 +480,10 @@ public class IATowa {
 
             for (int col = 0; col < TAILLE; col++) { // pour chaque colonne
 
-                /*if (activationPossible(plateau, lig, col, joueurNoir)) { // si l'activation d'une tour de cette couleur est possible sur cette case
-                    actions[nbActions] = activationPerso(plateau, lig, col, nbPionsNoirs, nbPionsBlancs);
+                if (activationPossible(plateau, lig, col, joueurNoir)) { // si l'activation d'une tour de cette couleur est possible sur cette case
+                    actions[nbActions] = activationPerso(plateau, lig, col);
                     nbActions++;
-                }*/
+                }
                 if (posePossible(plateau, lig, col, joueurNoir)) { // si la pose d'un pion de cette couleur est possible sur cette case
                     actions[nbActions] = actionPose(plateau, lig, col, joueurNoir, nbPionsNoirs, nbPionsBlancs);
                     nbActions++;
