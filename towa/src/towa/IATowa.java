@@ -240,7 +240,7 @@ public class IATowa {
      * @return true si la case est vide et qu'il y a une tour ennemie adjacente.
      */
     boolean doublePose(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
-        if ((!plateau[ligne][colonne].tourPresente && adjacent(plateau, ligne, colonne, estNoir)) && plateau[ligne][colonne].altitude <= 2) {
+        if ((!plateau[ligne][colonne].tourPresente && adjacent(plateau, ligne, colonne, estNoir))) {
             return true;
         } else {
             return false;
@@ -286,16 +286,11 @@ public class IATowa {
      * @return un tableau contenant la ligne, la colonne et la couleur (1 pour noir, 2 pour blanc)
      */
     void parcoursGrilleEnnemi(Case[][] plateau, int ligDepart, int colDepart, int incremLig, int incremCol, boolean estNoir, int hauteur) {
-        int[][] tours = new int[15][2];
-        int iTours = 0;
         while (caseExiste(ligDepart, colDepart)) {
-            if (plateau[ligDepart][colDepart].tourPresente && plateau[ligDepart][colDepart].hauteur < hauteur) {
-                if (plateau[ligDepart][colDepart].estNoire != estNoir) {
-                    plateau[ligDepart][colDepart].hauteur = 0;
-                    plateau[ligDepart][colDepart].tourPresente = false;
-                }
-                ligDepart += incremLig;
-                colDepart += incremCol;
+            if (plateau[ligDepart][colDepart].tourPresente && plateau[ligDepart][colDepart].hauteur < hauteur && plateau[ligDepart][colDepart].estNoire != estNoir) {
+                    detruireTour(plateau,ligDepart,colDepart);
+                    ligDepart += incremLig;
+                    colDepart += incremCol;
             }
         }
     }
@@ -343,15 +338,17 @@ public class IATowa {
         for (int i = ligne - 1; i <= ligne + 1; i += 2) {
             for (int j = colonne - 1; j <= colonne + 1; j += 2) {
                 if (caseExiste(i, j)) {
-                    if ((plateau[i][j].tourPresente) && (plateau[i][j].estNoire != estNoir)) {
-                        if (plateau[i][j].hauteur < hauteur) {
-                            plateau[i][j].hauteur=0;
-                            plateau[i][j].tourPresente=false;
-                        }
+                    if ((plateau[i][j].tourPresente) && (plateau[i][j].estNoire != estNoir)&&(plateau[i][j].hauteur)<hauteur) {
+                           detruireTour(plateau,i,j);
                     }
                 }
             }
         }
+    }
+    
+    void detruireTour(Case[][] plateau, int ligne, int colonne ){
+        plateau[ligne][colonne].tourPresente = false;
+        plateau[ligne][colonne].hauteur = 0;
     }
     
     /**

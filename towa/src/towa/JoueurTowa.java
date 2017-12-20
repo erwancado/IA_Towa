@@ -1,4 +1,4 @@
-//package towa;
+package towa;
 //
 //import java.text.SimpleDateFormat;
 //import java.util.Date;
@@ -10,17 +10,17 @@
 //
 //    /**
 //     * Taille d'un côté du plateau (carré).
-//     */
-//    final static int TAILLE = 16;
-//
-//    /**
-//     * Cette méthode renvoie, pour un plateau donné et un joueur donné, toutes les actions possibles pour ce joueur.
-//     *
-//     * @param plateau le plateau considéré
-//     * @param joueurNoir vrai si le joueur noir joue, faux si c'est le blanc
-//     * @param niveau le niveau de la partie à jouer
-//     * @return l'ensemble des actions possibles
-//     */
+//    */
+//   final static int TAILLE = 16;
+
+    /**
+     * Cette méthode renvoie, pour un plateau donné et un joueur donné, toutes les actions possibles pour ce joueur.
+     *
+     * @param plateau le plateau considéré
+     * @param joueurNoir vrai si le joueur noir joue, faux si c'est le blanc
+     * @param niveau le niveau de la partie à jouer
+     * @return l'ensemble des actions possibles
+     */
 //    @Override
 //    public String[] actionsPossibles(Case[][] plateau, boolean joueurNoir, int niveau) {
 //        // afficher l'heure de lancement
@@ -44,8 +44,8 @@
 //                }
 //            }
 //        }
-//
-//        // permet d'agrandir la taille de la grille en fonction des pions déjà présent et des actions
+
+        // permet d'agrandir la taille de la grille en fonction des pions déjà présent et des actions
 //        String actions[];
 //        if (joueurNoir) {
 //            actions = new String[TAILLE * TAILLE * TAILLE * TAILLE + nbPionsNoirs + 4];
@@ -64,9 +64,9 @@
 //        for (int lig = 0; lig < TAILLE; lig++) { //pour chaque ligne
 //
 //            for (int col = 0; col < TAILLE; col++) { // pour chaque colonne
-//
+
 //                if (activationPossible(plateau, lig, col, joueurNoir)) { // si l'activation d'une tour de cette couleur est possible sur cette case
-//                    actions[nbActions] = actionActivation(plateau, lig, col, joueurNoir, nbPionsNoirs, nbPionsBlancs);
+////                    actions[nbActions] = actionActivation(plateau, lig, col, joueurNoir, nbPionsNoirs, nbPionsBlancs);
 //                    nbActions++;
 //                }
 //
@@ -80,7 +80,7 @@
 ////                }
 //
 //                if (posePossible(plateau, lig, col, joueurNoir)) { // si la pose d'un pion de cette couleur est possible sur cette case
-//                    actions[nbActions] = actionPose(plateau, lig, col, joueurNoir, nbPionsNoirs, nbPionsBlancs);
+////                    actions[nbActions] = actionPose(plateau, lig, col, joueurNoir, nbPionsNoirs, nbPionsBlancs);
 //                    nbActions++;
 //                }
 //            }
@@ -89,16 +89,16 @@
 //        System.out.println("actionsPossibles : fin");
 //        return Utils.nettoyerTableau(actions);
 //    }
-//
-//    /**
-//     * Indique s'il est possible de poser un pion sur une case pour ce plateau, ce joueur, dans ce niveau.
-//     *
-//     * @param plateau le plateau
-//     * @param ligne ligne de la case à considérer
-//     * @param colonne colonne de la case à considérer
-//     * @param estNoir vrai ssi il s'agit du tour du joueur noir
-//     * @return vrai ssi la pose d'un pion sur cette case est autorisée dans ce niveau
-//     */
+
+    /**
+     * Indique s'il est possible de poser un pion sur une case pour ce plateau, ce joueur, dans ce niveau.
+     *
+     * @param plateau le plateau
+     * @param ligne ligne de la case à considérer
+     * @param colonne colonne de la case à considérer
+     * @param estNoir vrai ssi il s'agit du tour du joueur noir
+     * @return vrai ssi la pose d'un pion sur cette case est autorisée dans ce niveau
+     */
 //    boolean posePossible(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
 //        if (niveau(plateau, ligne, colonne) < 4 && !(plateau[ligne][colonne].altitude == 3 && adjacent(plateau, ligne, colonne, estNoir)) && plateau[ligne][colonne].nature != 1) {
 //            if (!plateau[ligne][colonne].tourPresente) {
@@ -111,30 +111,30 @@
 //        return false;
 //
 //    }
-//
-//    /**
-//     * Indique s'il est possible d'active une tour sur une case pour ce plateau, ce joueur, dans ce niveau.
-//     *
-//     * @param plateau le plateau
-//     * @param ligne ligne de la case à considérer
-//     * @param colonne colonne de la case à considérer
-//     * @param estNoir vrai ssi il s'agit du tour du joueur noir
-//     * @return vrai ssi la pose d'un pion sur cette case est autorisée dans ce niveau
-//     */
+
+    /**
+     * Indique s'il est possible d'active une tour sur une case pour ce plateau, ce joueur, dans ce niveau.
+     *
+     * @param plateau le plateau
+     * @param ligne ligne de la case à considérer
+     * @param colonne colonne de la case à considérer
+     * @param estNoir vrai ssi il s'agit du tour du joueur noir
+     * @return vrai ssi la pose d'un pion sur cette case est autorisée dans ce niveau
+     */
 //    boolean activationPossible(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
 //        if (plateau[ligne][colonne].tourPresente && plateau[ligne][colonne].estNoire == estNoir) {
 //            return true;
 //        }
 //        return false;
 //    }
-//
-//    /**
-//     * Indique si la case existe, c'est à dire, si elle est dans la grille.
-//     *
-//     * @param ligne ligne de la case à considérer
-//     * @param colonne colonne de la case à considérer
-//     * @return true si elle existe, false sinon
-//     */
+
+    /**
+     * Indique si la case existe, c'est à dire, si elle est dans la grille.
+     *
+     * @param ligne ligne de la case à considérer
+     * @param colonne colonne de la case à considérer
+     * @return true si elle existe, false sinon
+     */
 //    boolean caseExiste(int ligne, int colonne) {
 //        if (ligne >= 0 && ligne < TAILLE && colonne >= 0 && colonne < TAILLE) {
 //            return true;
@@ -146,16 +146,16 @@
 //    int niveau(Case[][] plateau, int ligne, int colonne) {
 //        return (plateau[ligne][colonne].hauteur + plateau[ligne][colonne].altitude);
 //    }
-//
-//    /**
-//     * Compte le nombre de pions à éliminer autour de la tour activée.
-//     *
-//     * @param plateau le plateau
-//     * @param ligne ligne de la case sur laquelle la tour est activée
-//     * @param colonne colonne de la case sur laquelle la tour est activée
-//     * @param estNoir couleur du joueur
-//     * @return le nombre de pions à éliminer
-//     */
+
+    /**
+     * Compte le nombre de pions à éliminer autour de la tour activée.
+     *
+     * @param plateau le plateau
+     * @param ligne ligne de la case sur laquelle la tour est activée
+     * @param colonne colonne de la case sur laquelle la tour est activée
+     * @param estNoir couleur du joueur
+     * @return le nombre de pions à éliminer
+     */
 //    int carreActivation(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
 //        int nbPions = 0;
 //        for (int i = ligne - 1; i <= ligne + 1; i += 2) {
@@ -171,16 +171,16 @@
 //        }
 //        return nbPions;
 //    }
-//
-//    /**
-//     * Compte le nombre de pions à éliminer autour de la tour fusionnée.
-//     *
-//     * @param plateau le plateau
-//     * @param ligne ligne de la case sur laquelle se trouve la tour à fusionner
-//     * @param colonne colonne de la case sur laquelle se trouve la tour à fusionner
-//     * @param estNoir couleur du joueur
-//     * @return le nombre de pions à éliminer
-//     */
+
+    /**
+     * Compte le nombre de pions à éliminer autour de la tour fusionnée.
+     *
+     * @param plateau le plateau
+     * @param ligne ligne de la case sur laquelle se trouve la tour à fusionner
+     * @param colonne colonne de la case sur laquelle se trouve la tour à fusionner
+     * @param estNoir couleur du joueur
+     * @return le nombre de pions à éliminer
+     */
 //    int carreFusion(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
 //        int nbPions = 0;
 //        for (int i = ligne - 1; i <= ligne + 1; i += 2) {
@@ -196,16 +196,16 @@
 //        }
 //        return nbPions;
 //    }
-//
-//    /**
-//     * Compte le nombre de tours ennemies desctructibles sur la ligne.
-//     *
-//     * @param plateau le plateau
-//     * @param ligne ligne de la case activée
-//     * @param colonne colonne de la case activée
-//     * @param estNoir couleur du joueur
-//     * @return le nombre de tours ennemies desctructibles sur la ligne
-//     */
+
+    /**
+     * Compte le nombre de tours ennemies desctructibles sur la ligne.
+     *
+     * @param plateau le plateau
+     * @param ligne ligne de la case activée
+     * @param colonne colonne de la case activée
+     * @param estNoir couleur du joueur
+     * @return le nombre de tours ennemies desctructibles sur la ligne
+     */
 //    int ligneActivation(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
 //        int nbPions = 0;
 //        int i = colonne - 1;
@@ -235,16 +235,16 @@
 //
 //        return nbPions;
 //    }
-//
-//    /**
-//     * Compte le nombre de tours amies desctructibles sur la ligne.
-//     *
-//     * @param plateau le plateau
-//     * @param ligne ligne de la case fusionnée
-//     * @param colonne colonne de la case fusionnée
-//     * @param estNoir couleur du joueur
-//     * @return le nombre de tours amies desctructibles sur la ligne
-//     */
+
+    /**
+     * Compte le nombre de tours amies desctructibles sur la ligne.
+     *
+     * @param plateau le plateau
+     * @param ligne ligne de la case fusionnée
+     * @param colonne colonne de la case fusionnée
+     * @param estNoir couleur du joueur
+     * @return le nombre de tours amies desctructibles sur la ligne
+     */
 //    int ligneFusion(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
 //        int nbPions = 0;
 //        int i = colonne - 1;
@@ -274,16 +274,16 @@
 //
 //        return nbPions;
 //    }
-//
-//    /**
-//     * Compte le nombre de tours ennemies desctructibles sur la colonne.
-//     *
-//     * @param plateau le plateau
-//     * @param ligne ligne de la case activée
-//     * @param colonne colonne de la case activée
-//     * @param estNoir couleur du joueur
-//     * @return le nombre de tours ennemies desctructibles sur la colonne
-//     */
+
+    /**
+     * Compte le nombre de tours ennemies desctructibles sur la colonne.
+     *
+     * @param plateau le plateau
+     * @param ligne ligne de la case activée
+     * @param colonne colonne de la case activée
+     * @param estNoir couleur du joueur
+     * @return le nombre de tours ennemies desctructibles sur la colonne
+     */
 //    int colonneActivation(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
 //        int nbPions = 0;
 //        int i = ligne - 1;
@@ -312,16 +312,16 @@
 //        }
 //        return nbPions;
 //    }
-//
-//    /**
-//     * Compte le nombre de tours amies desctructibles sur la colonne.
-//     *
-//     * @param plateau le plateau
-//     * @param ligne ligne de la case fusionnée
-//     * @param colonne colonne de la case fusionnée
-//     * @param estNoir couleur du joueur
-//     * @return le nombre de tours amies desctructibles sur la colonne
-//     */
+
+    /**
+     * Compte le nombre de tours amies desctructibles sur la colonne.
+     *
+     * @param plateau le plateau
+     * @param ligne ligne de la case fusionnée
+     * @param colonne colonne de la case fusionnée
+     * @param estNoir couleur du joueur
+     * @return le nombre de tours amies desctructibles sur la colonne
+     */
 //    int colonneFusion(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
 //        int nbPions = 0;
 //        int i = ligne - 1;
@@ -350,17 +350,17 @@
 //        }
 //        return nbPions;
 //    }
-//
-//    /**
-//     * Parcours une ligne ou une colonne en fonction de ses paramètres et renvoie la ligne et la colonne de la première tour rencontrée ainsi que sa couleur.
-//     *
-//     * @param plateau le plateau
-//     * @param ligDepart indice de la ligne de départ
-//     * @param colDepart indice de la colonne de départ
-//     * @param incremLig incrément pour les lignes
-//     * @param incremCol incrément pour les colonnes
-//     * @return un tableau contenant la ligne, la colonne et la couleur (1 pour noir, 2 pour blanc)
-//     */
+
+    /**
+     * Parcours une ligne ou une colonne en fonction de ses paramètres et renvoie la ligne et la colonne de la première tour rencontrée ainsi que sa couleur.
+     *
+     * @param plateau le plateau
+     * @param ligDepart indice de la ligne de départ
+     * @param colDepart indice de la colonne de départ
+     * @param incremLig incrément pour les lignes
+     * @param incremCol incrément pour les colonnes
+     * @return un tableau contenant la ligne, la colonne et la couleur (1 pour noir, 2 pour blanc)
+     */
 //    int[] parcoursGrille(Case[][] plateau, int ligDepart, int colDepart, int incremLig, int incremCol) {
 //        boolean tourAtteinte = false;
 //        int[] tourTrouvee = new int[3]; //Négatif si noir, positif si blanc
@@ -382,17 +382,17 @@
 //        }
 //        return tourTrouvee;
 //    }
-//
-//    /**
-//     * Compte le nombre de pions détruits par l'action kamikaze.
-//     *
-//     * @param plateau le plateau
-//     * @param ligDepart indice de la ligne de départ
-//     * @param colDepart indice de la colonne de départ
-//     * @param incremLig incrément pour les lignes
-//     * @param incremCol incrément pour les colonnes
-//     * @return un tableau de 2 entiers égaux au nombre de pions noirs détruits et au nombre de pions blancs détruits.
-//     */
+
+    /**
+     * Compte le nombre de pions détruits par l'action kamikaze.
+     *
+     * @param plateau le plateau
+     * @param ligDepart indice de la ligne de départ
+     * @param colDepart indice de la colonne de départ
+     * @param incremLig incrément pour les lignes
+     * @param incremCol incrément pour les colonnes
+     * @return un tableau de 2 entiers égaux au nombre de pions noirs détruits et au nombre de pions blancs détruits.
+     */
 //    int[] cptKamikaze(Case[][] plateau, int ligDepart, int colDepart, int incremLig, int incremCol) {
 //        int[] nbPions = new int[2];
 //        int nbPionsN = 0;
@@ -410,23 +410,23 @@
 //        nbPions[1] = nbPionsB;
 //        return nbPions;
 //    }
-//
+
 //    int[] symetrie(Case[][] plateau, int ligne, int colonne) {
 //        int[] coord = new int[2];
 //        coord[0] = TAILLE - 1 - ligne; //ligne de la case symétrique
 //        coord[1] = TAILLE - 1 - colonne; //colonne de la case symétrique
 //        return coord;
 //    }
-//
-//    /**
-//     * Vérifie si il y a une tour ennemie adjacente à la case.
-//     *
-//     * @param plateau le plateau
-//     * @param ligne ligne de la case
-//     * @param colonne colonne de la case
-//     * @param estNoir couleur du joueur
-//     * @return true si il y en a une, false sinon.
-//     */
+
+    /**
+     * Vérifie si il y a une tour ennemie adjacente à la case.
+     *
+     * @param plateau le plateau
+     * @param ligne ligne de la case
+     * @param colonne colonne de la case
+     * @param estNoir couleur du joueur
+     * @return true si il y en a une, false sinon.
+     */
 //    boolean adjacent(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
 //        boolean adjacent = false;
 //        for (int i = ligne - 1; i <= ligne + 1; i++) {
@@ -440,16 +440,16 @@
 //        }
 //        return adjacent;
 //    }
-//
-//    /**
-//     * Vérifie si une double pose est possible.
-//     *
-//     * @param plateau le plateau
-//     * @param ligne ligne de la case
-//     * @param colonne colonne de la case
-//     * @param estNoir couleur du joueur
-//     * @return true si la case est vide et qu'il y a une tour ennemie adjacente.
-//     */
+
+    /**
+     * Vérifie si une double pose est possible.
+     *
+     * @param plateau le plateau
+     * @param ligne ligne de la case
+     * @param colonne colonne de la case
+     * @param estNoir couleur du joueur
+     * @return true si la case est vide et qu'il y a une tour ennemie adjacente.
+     */
 //    public boolean doublePose(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
 //        if ((!plateau[ligne][colonne].tourPresente && adjacent(plateau, ligne, colonne, estNoir)) && plateau[ligne][colonne].altitude <= 2) {
 //            return true;
@@ -457,46 +457,46 @@
 //            return false;
 //        }
 //    }
-//
-//    /**
-//     * Vérifie si une fusion est possible.
-//     *
-//     * @param plateau le plateau
-//     * @param ligne ligne de la case
-//     * @param colonne colonne de la case
-//     * @param estNoir couleur du joueur
-//     * @return true si une fusion est possible, false sinon.
-//     */
+
+    /**
+     * Vérifie si une fusion est possible.
+     *
+     * @param plateau le plateau
+     * @param ligne ligne de la case
+     * @param colonne colonne de la case
+     * @param estNoir couleur du joueur
+     * @return true si une fusion est possible, false sinon.
+     */
 //    boolean fusionPossible(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
 //        return (plateau[ligne][colonne].tourPresente && plateau[ligne][colonne].estNoire == estNoir);
 //    }
-//
-//    /**
-//     * Vérifie si une action magie est possible.
-//     *
-//     * @param plateau le plateau
-//     * @param ligne ligne de la case
-//     * @param colonne colonne de la case
-//     * @param estNoir couleur du joueur
-//     * @return true si une action de magie est possible, false sinon.
-//     */
+
+    /**
+     * Vérifie si une action magie est possible.
+     *
+     * @param plateau le plateau
+     * @param ligne ligne de la case
+     * @param colonne colonne de la case
+     * @param estNoir couleur du joueur
+     * @return true si une action de magie est possible, false sinon.
+     */
 //    boolean magiePossible(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
 //        int ligSym = symetrie(plateau, ligne, colonne)[0];
 //        int colSym = symetrie(plateau, ligne, colonne)[1];
 //        int niveauSym = (plateau[ligne][colonne].hauteur + plateau[ligSym][colSym].altitude);
 //        return (!(plateau[ligSym][colSym].tourPresente) && niveauSym <= 4 && plateau[ligne][colonne].tourPresente && plateau[ligne][colonne].estNoire == estNoir && plateau[ligSym][colSym].nature != 1);
 //    }
-//
-//    /**
-//     * Vérifie si le plateau est couvrant après la pose de pionPose sur la case [ligne] [colonne].
-//     *
-//     * @param plateau le plateau
-//     * @param ligne ligne de la pose
-//     * @param colonne colonne de la pose
-//     * @param joueurNoir couleur du joueur
-//     * @param apresPose true si on fait une vérification après pose du pion, false sinon
-//     * @return true si il est couvrant, false sinon
-//     */
+
+    /**
+     * Vérifie si le plateau est couvrant après la pose de pionPose sur la case [ligne] [colonne].
+     *
+     * @param plateau le plateau
+     * @param ligne ligne de la pose
+     * @param colonne colonne de la pose
+     * @param joueurNoir couleur du joueur
+     * @param apresPose true si on fait une vérification après pose du pion, false sinon
+     * @return true si il est couvrant, false sinon
+     */
 //    boolean couvrant(Case[][] plateau, int ligne, int colonne, boolean joueurNoir, boolean apresPose) {
 //        boolean estCouvrant = true;
 //        int lig = 0;
@@ -511,18 +511,18 @@
 //        }
 //        return estCouvrant;
 //    }
-//
-//    /**
-//     * Vérifie si la ligne est couvrante.
-//     *
-//     * @param plateau le plateau
-//     * @param ligne la ligne dont on veut vérifier si elle est couvrante
-//     * @param ligPose la ligne de la pose
-//     * @param colPose la colonne de la pose
-//     * @param joueurNoir la couleur du joueur
-//     * @param apresPose true si on fait une vérification après pose du pion, false sinon
-//     * @return true si elle est couvrante, false sinon.
-//     */
+
+    /**
+     * Vérifie si la ligne est couvrante.
+     *
+     * @param plateau le plateau
+     * @param ligne la ligne dont on veut vérifier si elle est couvrante
+     * @param ligPose la ligne de la pose
+     * @param colPose la colonne de la pose
+     * @param joueurNoir la couleur du joueur
+     * @param apresPose true si on fait une vérification après pose du pion, false sinon
+     * @return true si elle est couvrante, false sinon.
+     */
 //    boolean ligneCouvrante(Case[][] plateau, int ligne, int ligPose, int colPose, boolean joueurNoir, boolean apresPose) {
 //        boolean estCouvrant = false;
 //        boolean noir = false; // true si au moins une tour noire est présente sur la ligne
@@ -549,18 +549,18 @@
 //        }
 //        return estCouvrant;
 //    }
-//
-//    /**
-//     * Vérifie si la colonne est couvrante.
-//     *
-//     * @param plateau le plateau
-//     * @param colonne la colonne dont on veut vérifier si elle est couvrante
-//     * @param ligPose la ligne de la pose
-//     * @param colPose la colonne de la pose
-//     * @param joueurNoir la couleur du joueur
-//     * @param apresPose true si on fait une vérification après pose du pion, false sinon
-//     * @return true si elle est couvrante, false sinon.
-//     */
+
+    /**
+     * Vérifie si la colonne est couvrante.
+     *
+     * @param plateau le plateau
+     * @param colonne la colonne dont on veut vérifier si elle est couvrante
+     * @param ligPose la ligne de la pose
+     * @param colPose la colonne de la pose
+     * @param joueurNoir la couleur du joueur
+     * @param apresPose true si on fait une vérification après pose du pion, false sinon
+     * @return true si elle est couvrante, false sinon.
+     */
 //    boolean colonneCouvrante(Case[][] plateau, int colonne, int ligPose, int colPose, boolean joueurNoir, boolean apresPose) {
 //        boolean estCouvrant = false;
 //        boolean noir = false; // true si au moins une tour noire est présente sur la colonne
@@ -587,18 +587,18 @@
 //        }
 //        return estCouvrant;
 //    }
-//
-//    /**
-//     * Action de pose d'un pion.
-//     *
-//     * @param plateau le plateau
-//     * @param ligne ligne de la case
-//     * @param colonne colonne de la case
-//     * @param estNoir couleur du joueur
-//     * @param nbPionsNoirs le nombre de pions noirs sur le plateau
-//     * @param nbPionsBlancs le nombre de pions blancs sur le plateau
-//     * @return l'action de pose à ajouter dans les actions possibles.
-//     */
+
+    /**
+     * Action de pose d'un pion.
+     *
+     * @param plateau le plateau
+     * @param ligne ligne de la case
+     * @param colonne colonne de la case
+     * @param estNoir couleur du joueur
+     * @param nbPionsNoirs le nombre de pions noirs sur le plateau
+     * @param nbPionsBlancs le nombre de pions blancs sur le plateau
+     * @return l'action de pose à ajouter dans les actions possibles.
+     */
 //    String actionPose(Case[][] plateau, int ligne, int colonne, boolean estNoir, int nbPionsNoirs, int nbPionsBlancs) {
 //
 //        if (posePossible(plateau, ligne, colonne, estNoir)) {
@@ -627,18 +627,18 @@
 //                + "," + nbPionsPoseB; // nombre de pions blancs
 //        return action;
 //    }
-//
-//    /**
-//     * Action d'activation d'une tour.
-//     *
-//     * @param plateau le plateau
-//     * @param ligne ligne de la case
-//     * @param colonne colonne de la case
-//     * @param estNoir couleur du joueur
-//     * @param nbPionsNoirs le nombre de pions noirs sur le plateau
-//     * @param nbPionsBlancs le nombre de pions blancs sur le plateau
-//     * @return l'action d'activation à ajouter dans les actions possibles.
-//     */
+
+    /**
+     * Action d'activation d'une tour.
+     *
+     * @param plateau le plateau
+     * @param ligne ligne de la case
+     * @param colonne colonne de la case
+     * @param estNoir couleur du joueur
+     * @param nbPionsNoirs le nombre de pions noirs sur le plateau
+     * @param nbPionsBlancs le nombre de pions blancs sur le plateau
+     * @return l'action d'activation à ajouter dans les actions possibles.
+     */
 //    String actionActivation(Case[][] plateau, int ligne, int colonne, boolean estNoir, int nbPionsNoirs, int nbPionsBlancs
 //    ) {
 //        int nbPionsActiveN = nbPionsNoirs;
@@ -658,18 +658,18 @@
 //                + "," + nbPionsActiveB; // nombre de pions blancs
 //        return action;
 //    }
-//
-//    /**
-//     * Action de fusion d'une tour.
-//     *
-//     * @param plateau le plateau
-//     * @param ligne ligne de la case
-//     * @param colonne colonne de la case
-//     * @param estNoir couleur du joueur
-//     * @param nbPionsNoirs le nombre de pions noirs sur le plateau
-//     * @param nbPionsBlancs le nombre de pions blancs sur le plateau
-//     * @return l'action de fusion à ajouter dans les actions possibles.
-//     */
+
+    /**
+     * Action de fusion d'une tour.
+     *
+     * @param plateau le plateau
+     * @param ligne ligne de la case
+     * @param colonne colonne de la case
+     * @param estNoir couleur du joueur
+     * @param nbPionsNoirs le nombre de pions noirs sur le plateau
+     * @param nbPionsBlancs le nombre de pions blancs sur le plateau
+     * @return l'action de fusion à ajouter dans les actions possibles.
+     */
 //    String actionFusion(Case[][] plateau, int ligne, int colonne, boolean estNoir, int nbPionsNoirs, int nbPionsBlancs
 //    ) {
 //        int nbPionsFusionN = nbPionsNoirs;
@@ -702,16 +702,16 @@
 //                + "," + nbPionsFusionB; // nombre de pions blancs
 //        return action;
 //    }
-//
-//    /**
-//     * Action des chatons kamikazes
-//     *
-//     * @param plateau le plateau
-//     * @param nbPionsNoirs
-//     * @param nbPionsBlancs
-//     * @param direction
-//     * @return
-//     */
+
+    /**
+     * Action des chatons kamikazes
+     *
+     * @param plateau le plateau
+     * @param nbPionsNoirs
+     * @param nbPionsBlancs
+     * @param direction
+     * @return
+     */
 //    String actionKamikaze(Case[][] plateau, int nbPionsNoirs, int nbPionsBlancs, char direction
 //    ) {
 //        int[] nbPions = new int[2];
@@ -742,18 +742,18 @@
 //                + "," + nbPionsB; // nombre de pions blancs
 //        return action;
 //    }
-//
-//    /**
-//     * Cette méthode renvoie, pour un plateau donné et un joueur donné, l'ensemble des actions de magie possible pour ce joueur
-//     *
-//     * @param plateau le plateau considéré
-//     * @param ligne ligne de la case considérée
-//     * @param colonne colonne de la case considérée
-//     * @param estNoir vrai si le joueur noir joue, faux si c'est le blanc
-//     * @param nbPionsNoirs nombre de pions noirs sur le plateau
-//     * @param nbPionsBlancs nombre de pions blanc sur le plateau
-//     * @return l'ensemble des actions de magie possibles
-//     */
+
+    /**
+     * Cette méthode renvoie, pour un plateau donné et un joueur donné, l'ensemble des actions de magie possible pour ce joueur
+     *
+     * @param plateau le plateau considéré
+     * @param ligne ligne de la case considérée
+     * @param colonne colonne de la case considérée
+     * @param estNoir vrai si le joueur noir joue, faux si c'est le blanc
+     * @param nbPionsNoirs nombre de pions noirs sur le plateau
+     * @param nbPionsBlancs nombre de pions blanc sur le plateau
+     * @return l'ensemble des actions de magie possibles
+     */
 //    String actionMagie(Case[][] plateau, int ligne, int colonne, int nbPionsNoirs, int nbPionsBlancs) {
 //        String action = "M" // action = Magie
 //                + Utils.numVersCarLigne(ligne) // convertit la ligne de la case symetrique en lettre
@@ -762,12 +762,12 @@
 //                + "," + nbPionsBlancs; // nombre de pions blancs        
 //        return action;
 //    }
-//
-//    /**
-//     * Une fonction principale juste là pour que vous puissiez tester votre actionsPossibles() sur le plateau de votre choix. À modifier librement.
-//     *
-//     * @param args arguments de la ligne de commande, inutiles ici
-//     */
+
+    /**
+     * Une fonction principale juste là pour que vous puissiez tester votre actionsPossibles() sur le plateau de votre choix. À modifier librement.
+     *
+     * @param args arguments de la ligne de commande, inutiles ici
+     */
 //    public static void main(String[] args) {
 //        JoueurTowa joueur = new JoueurTowa();
 //        // un plateau sur lequel on veut tester actionsPossibles()

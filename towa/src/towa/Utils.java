@@ -14,6 +14,8 @@ public class Utils {
      * Indice de la première ligne (et colonne).
      */
     final static int NUM_LIGNE_MIN = 0;
+    
+    final static int TAILLE = 16;
 
     /**
      * Indice de la dernière ligne (et colonne).
@@ -140,11 +142,11 @@ public class Utils {
      * @return le plateau
      */
     public static Case[][] plateauDepuisTexte(final String texteOriginal) {
-        final Case[][] plateau = new Case[JoueurTowa.TAILLE][JoueurTowa.TAILLE];
+        final Case[][] plateau = new Case[TAILLE][TAILLE];
         final String[] lignes = texteOriginal.split("\n");
-        for (int lig = 0; lig < JoueurTowa.TAILLE; lig++) {
+        for (int lig = 0; lig < TAILLE; lig++) {
             final String ligne = lignes[2 * (lig + 1)];
-            for (int col = 0; col < JoueurTowa.TAILLE; col++) {
+            for (int col = 0; col < TAILLE; col++) {
                 String codage = ligne.substring(2 + 4 * col, 2 + 4 * col + 3);
                 plateau[lig][col] = caseDepuisCodage(codage);
             }
