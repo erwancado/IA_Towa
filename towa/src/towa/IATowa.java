@@ -146,7 +146,6 @@ public class IATowa {
      * @param colonne la colonne de la case de pose ennemie
      * @param ordreCourant l'ordre de jeu pour connaître la couleur du joueur ennemi.
      */
-    
     void ajoutPose(Case[][] plateau, int ligne, int colonne, int ordreCourant) {
         plateau[ligne][colonne].tourPresente = true;
         boolean estNoir = ordreCourant == 1;
@@ -167,10 +166,12 @@ public class IATowa {
         carreActivationEnnemi(plateau, ligne, colonne, estNoir, hauteur);
     }
 
-    String activationPerso(Case[][] plateau, int ligne, int colonne) {
+    String activationPerso(Case[][] plateau, int ligne, int colonne, boolean estNoir,int hauteur) {
+        int nbPionsDetruits = parcoursColonnePerso(plateau, colonne, estNoir, hauteur) + parcoursLignePerso(plateau, ligne, estNoir, hauteur) + carreActivationPerso(plateau, ligne, colonne, estNoir, hauteur);
         String action = "A" // action = Activation
                 + Utils.numVersCarLigne(ligne) // convertit la ligne en lettre
-                + Utils.numVersCarColonne(colonne);
+                + Utils.numVersCarColonne(colonne)
+                + nbPionsDetruits;
         return action;
     }
 
@@ -185,17 +186,29 @@ public class IATowa {
         boolean estNoir = ordre == 1;
         String[] actionsPossibles = actionsPossibles(plateau, estNoir);
         int nbActions = actionsPossibles.length;
-        Random rand = new Random();
-        int iAction = rand.nextInt(nbActions);
+        int iAction = 0;
+        int pionsDetruits=0;
+        for(int i = 0; i<nbActions;i++){
+            if(actionsPossibles[i].charAt(0)=='A' && actionsPossibles[i].charAt(3)>pionsDetruits){
+                iAction=i;
+                pionsDetruits=actionsPossibles[i].charAt(3);
+            }
+            else{
+                if(actionsPossibles[i].charAt(3) >= actionsPossibles[i+1].charAt(3)){
+                    iAction = i;
+                    i = nbActions-1;
+                }
+            }
+        }
         String action = actionsPossibles[iAction];
         grandOrdo.envoiCaractere(action.charAt(0));
         grandOrdo.envoiCaractere(action.charAt(1));
         grandOrdo.envoiCaractere(action.charAt(2));
-        
+
         if (action.charAt(0) == 'P') {
-            ajoutPose(plateau, Utils.carLigneVersNum(action.charAt(1)), Utils.carColonneVersNum(action.charAt(2)) , ordre);
+            ajoutPose(plateau, Utils.carLigneVersNum(action.charAt(1)), Utils.carColonneVersNum(action.charAt(2)), ordre);
         } else {
-            activationEnnemie(plateau, Utils.carLigneVersNum(action.charAt(1)), Utils.carColonneVersNum(action.charAt(2)) , ordre);
+            activationEnnemie(plateau, Utils.carLigneVersNum(action.charAt(1)), Utils.carColonneVersNum(action.charAt(2)), ordre);
         }
 
     }
@@ -227,22 +240,24 @@ public class IATowa {
      * @param incremCol incrément pour les colonnes
      * @return un tableau contenant la ligne, la colonne et la couleur (1 pour noir, 2 pour blanc)
      */
-    int[][] parcoursGrillePerso(Case[][] plateau, int ligDepart, int colDepart, int incremLig, int incremCol, boolean estNoir, int hauteur) {
-        int[][] tours = new int[15][2];
-        int iTours = 0;
-        while (caseExiste(ligDepart, colDepart)) {
-            if (plateau[ligDepart][colDepart].tourPresente && plateau[ligDepart][colDepart].hauteur < hauteur) {
-                if (plateau[ligDepart][colDepart].estNoire != estNoir) {
-                    plateau[ligDepart][colDepart].hauteur = 0;
-                    plateau[ligDepart][colDepart].tourPresente = false;
-                }
-                ligDepart += incremLig;
-                colDepart += incremCol;
+    int parcoursLignePerso(Case[][] plateau, int ligne, boolean estNoir, int hauteur) {
+        int nbPionsDetruits = 0;
+        for (int i = 0; i < TAILLE; i++) {
+            if (plateau[ligne][i].tourPresente && plateau[ligne][i].hauteur < hauteur && plateau[ligne][i].estNoire != estNoir) {
+                nbPionsDetruits += plateau[ligne][i].hauteur;
             }
         }
-        int[][] toursPlein = new int[iTours][2];
-        System.arraycopy(tours, 0, toursPlein, iTours, iTours);
-        return toursPlein;
+        return nbPionsDetruits;
+    }
+
+    int parcoursColonnePerso(Case[][] plateau, int colonne, boolean estNoir, int hauteur) {
+        int nbPionsDetruits = 0;
+        for (int i = 0; i < TAILLE; i++) {
+            if (plateau[i][colonne].tourPresente && plateau[i][colonne].hauteur < hauteur && plateau[i][colonne].estNoire != estNoir) {
+                nbPionsDetruits += plateau[i][colonne].hauteur;
+            }
+        }
+        return nbPionsDetruits;
     }
 
     /**
@@ -256,20 +271,21 @@ public class IATowa {
      * @return un tableau contenant la ligne, la colonne et la couleur (1 pour noir, 2 pour blanc)
      */
     void parcoursLigneEnnemi(Case[][] plateau, int ligne, boolean estNoir, int hauteur) {
-        for (int i=0;i<TAILLE;i++) {
+        for (int i = 0; i < TAILLE; i++) {
             if (plateau[ligne][i].tourPresente && plateau[ligne][i].hauteur < hauteur && plateau[ligne][i].estNoire != estNoir) {
-                    detruireTour(plateau,ligne,i);
+                detruireTour(plateau, ligne, i);
             }
         }
     }
-    
+
     void parcoursColonneEnnemi(Case[][] plateau, int colonne, boolean estNoir, int hauteur) {
-        for (int i= 0;i<TAILLE;i++) {
+        for (int i = 0; i < TAILLE; i++) {
             if (plateau[i][colonne].tourPresente && plateau[i][colonne].hauteur < hauteur && plateau[i][colonne].estNoire != estNoir) {
-                    detruireTour(plateau,i,colonne);
+                detruireTour(plateau, i, colonne);
             }
         }
     }
+
     /**
      * Compte le nombre de pions à éliminer autour de la tour activée.
      *
@@ -279,25 +295,20 @@ public class IATowa {
      * @param estNoir couleur du joueur
      * @return le nombre de pions à éliminer
      */
-    int[][] carreActivationPerso(Case[][] plateau, int ligne, int colonne, boolean estNoir, int hauteur) {
-        int[][] tours = new int[4][2];
-        int iTours = 0;
+    int carreActivationPerso(Case[][] plateau, int ligne, int colonne, boolean estNoir, int hauteur) {
+        int nbPionsDetruits=0;
         for (int i = ligne - 1; i <= ligne + 1; i += 2) {
             for (int j = colonne - 1; j <= colonne + 1; j += 2) {
                 if (caseExiste(i, j)) {
                     if ((plateau[i][j].tourPresente) && (plateau[i][j].estNoire != estNoir)) {
                         if (plateau[i][j].hauteur < hauteur) {
-                            int[] tourTrouvee = {i, j};
-                            tours[iTours] = tourTrouvee;
-                            iTours++;
+                            nbPionsDetruits+=plateau[i][j].hauteur;
                         }
                     }
                 }
             }
         }
-        int[][] toursPlein = new int[iTours][2];
-        System.arraycopy(tours, 0, toursPlein, iTours, iTours);
-        return toursPlein;
+        return nbPionsDetruits;
     }
 
     /**
@@ -310,23 +321,23 @@ public class IATowa {
      * @return le nombre de pions à éliminer
      */
     void carreActivationEnnemi(Case[][] plateau, int ligne, int colonne, boolean estNoir, int hauteur) {
-        
+
         for (int i = ligne - 1; i <= ligne + 1; i += 2) {
             for (int j = colonne - 1; j <= colonne + 1; j += 2) {
                 if (caseExiste(i, j)) {
-                    if ((plateau[i][j].tourPresente) && (plateau[i][j].estNoire != estNoir)&&(plateau[i][j].hauteur)<hauteur) {
-                           detruireTour(plateau,i,j);
+                    if ((plateau[i][j].tourPresente) && (plateau[i][j].estNoire != estNoir) && (plateau[i][j].hauteur) < hauteur) {
+                        detruireTour(plateau, i, j);
                     }
                 }
             }
         }
     }
-    
-    void detruireTour(Case[][] plateau, int ligne, int colonne ){
+
+    void detruireTour(Case[][] plateau, int ligne, int colonne) {
         plateau[ligne][colonne].tourPresente = false;
         plateau[ligne][colonne].hauteur = 0;
     }
-    
+
     /**
      * Indique si la case existe, c'est à dire, si elle est dans la grille.
      *
@@ -414,29 +425,19 @@ public class IATowa {
      * @param nbPionsBlancs le nombre de pions blancs sur le plateau
      * @return l'action de pose à ajouter dans les actions possibles.
      */
-    String actionPose(Case[][] plateau, int ligne, int colonne, boolean estNoir, int nbPionsNoirs, int nbPionsBlancs) {
-        int nbPionsPoseN = nbPionsNoirs;
-        int nbPionsPoseB = nbPionsBlancs;
+    String actionPose(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
+        int nbPionsPose = 0;
 
-        if (estNoir) {
-            if (doublePose(plateau, ligne, colonne, estNoir)) {
-                nbPionsPoseN += 2;
-            } else {
-                nbPionsPoseN++;
-            }
+        if (doublePose(plateau, ligne, colonne, estNoir)) {
+            nbPionsPose += 2;
         } else {
-            if (doublePose(plateau, ligne, colonne, estNoir)) {
-                nbPionsPoseN += 2;
-            } else {
-                nbPionsPoseN++;
-            }
+            nbPionsPose++;
         }
         // on ajoute l'action dans les actions possibles
         String action = "P" // action = Pose
                 + Utils.numVersCarLigne(ligne) // convertit la ligne en lettre
                 + Utils.numVersCarColonne(colonne) // convertit la colonne en lettre
-                + "," + nbPionsPoseN // nombre de pions noirs
-                + "," + nbPionsPoseB; // nombre de pions blancs
+                + nbPionsPose;// nombre de pions noirs
         return action;
     }
 
@@ -452,40 +453,23 @@ public class IATowa {
         //initialisation de notre nombre d'action
         int nbActions = 0;
         //comptage des pions sur notre plateau
-        int nbPionsNoirs = 0;
-        int nbPionsBlancs = 0;
-
-        for (int lig = 0; lig < TAILLE; lig++) { //pour chaque ligne
-
-            for (int col = 0; col < TAILLE; col++) { // pour chaque colonne
-                if (plateau[lig][col].tourPresente) {
-                    if (plateau[lig][col].estNoire) {
-                        nbPionsNoirs += plateau[lig][col].hauteur;
-                    } else {
-                        nbPionsBlancs += plateau[lig][col].hauteur;
-                    }
-                }
-            }
-        }
 
         // permet d'agrandir la taille de la grille en fonction des pions déjà présent et des actions
         String actions[];
-        if (joueurNoir) {
-            actions = new String[TAILLE * TAILLE + nbPionsNoirs +2];
-        } else {
-            actions = new String[TAILLE * TAILLE + nbPionsBlancs + 2];
-        }
+
+        actions = new String[TAILLE * TAILLE + 2];
 
         for (int lig = 0; lig < TAILLE; lig++) { //pour chaque ligne
 
             for (int col = 0; col < TAILLE; col++) { // pour chaque colonne
 
-                if (activationPossible(plateau, lig, col, joueurNoir)) { // si l'activation d'une tour de cette couleur est possible sur cette case
-                    actions[nbActions] = activationPerso(plateau, lig, col);
+                if (activationPossible(plateau, lig, col, joueurNoir)) {// si l'activation d'une tour de cette couleur est possible sur cette case
+                    int hauteur = plateau[lig][col].hauteur;
+                    actions[nbActions] = activationPerso(plateau, lig, col,joueurNoir,hauteur);
                     nbActions++;
                 }
                 if (posePossible(plateau, lig, col, joueurNoir)) { // si la pose d'un pion de cette couleur est possible sur cette case
-                    actions[nbActions] = actionPose(plateau, lig, col, joueurNoir, nbPionsNoirs, nbPionsBlancs);
+                    actions[nbActions] = actionPose(plateau, lig, col, joueurNoir);
                     nbActions++;
                 }
             }
