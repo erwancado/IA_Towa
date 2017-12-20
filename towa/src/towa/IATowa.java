@@ -166,7 +166,7 @@ public class IATowa {
         carreActivationEnnemi(plateau, ligne, colonne, estNoir, hauteur);
     }
 
-    String activationPerso(Case[][] plateau, int ligne, int colonne, boolean estNoir,int hauteur) {
+    String activationPerso(Case[][] plateau, int ligne, int colonne, boolean estNoir, int hauteur) {
         int nbPionsDetruits = parcoursColonnePerso(plateau, colonne, estNoir, hauteur) + parcoursLignePerso(plateau, ligne, estNoir, hauteur) + carreActivationPerso(plateau, ligne, colonne, estNoir, hauteur);
         String action = "A" // action = Activation
                 + Utils.numVersCarLigne(ligne) // convertit la ligne en lettre
@@ -186,20 +186,26 @@ public class IATowa {
         boolean estNoir = ordre == 1;
         String[] actionsPossibles = actionsPossibles(plateau, estNoir);
         int nbActions = actionsPossibles.length;
-        int iAction = 0;
-        int pionsDetruits=0;
-        for(int i = 0; i<nbActions;i++){
-            if(actionsPossibles[i].charAt(0)=='A' && actionsPossibles[i].charAt(3)>pionsDetruits){
-                iAction=i;
-                pionsDetruits=actionsPossibles[i].charAt(3);
-            }
-            else{
-                if(actionsPossibles[i].charAt(3) >= actionsPossibles[i+1].charAt(3)){
+        Random rand = new Random();
+        int iAction = rand.nextInt(nbActions);
+        int pionsDetruits = 4;
+        for (int i = 0; i < nbActions; i++) {
+            if (actionsPossibles[i].charAt(0) == 'A' && Character.getNumericValue(actionsPossibles[i].charAt(3)) > pionsDetruits) {
+                iAction = i;
+                pionsDetruits = Character.getNumericValue(actionsPossibles[i].charAt(3));
+                i = nbActions - 1;
+            } else if(actionsPossibles[i].charAt(0) == 'P' && actionsPossibles[i].charAt(3)==2){
                     iAction = i;
-                    i = nbActions-1;
+                    i = nbActions - 1;
+                }
+            else{
+                if(actionsPossibles[i].charAt(0) == 'P' && actionsPossibles[i].charAt(1) == poseTourAdjacent(plateau, estNoir)[0] && actionsPossibles[i].charAt(2) == poseTourAdjacent(plateau, estNoir)[1]){
+                    iAction=i;
+                    i = nbActions - 1;
                 }
             }
-        }
+            }
+        
         String action = actionsPossibles[iAction];
         grandOrdo.envoiCaractere(action.charAt(0));
         grandOrdo.envoiCaractere(action.charAt(1));
@@ -210,7 +216,7 @@ public class IATowa {
         } else {
             activationEnnemie(plateau, Utils.carLigneVersNum(action.charAt(1)), Utils.carColonneVersNum(action.charAt(2)), ordre);
         }
-
+        System.out.println(action);
     }
 
     /**
@@ -228,6 +234,44 @@ public class IATowa {
         } else {
             return false;
         }
+    }
+
+    char[] poseTourAdjacent(Case[][] plateau, boolean estNoir) {
+        int[] tab = new int[2];
+        char[] tabChar=new char[2];
+        for (int i = 0; i < TAILLE; i++) {
+            for (int j = 0; j < TAILLE; j++) {
+                if (plateau[i][j].tourPresente && plateau[i][j].estNoire != estNoir) {
+                    if (presenceTour(plateau, i, j, estNoir)[0] != -1) {
+                        tab = presenceTour(plateau, i, j, estNoir);
+                        i = TAILLE - 1;
+                        j = TAILLE - 1;
+
+                    }
+                }
+            }
+        }
+        tabChar[0]=Utils.numVersCarLigne(tab[0]);
+        tabChar[1]=Utils.numVersCarLigne(tab[1]);
+        return tabChar;
+    }
+
+    int[] presenceTour(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
+        int[] tab = new int[2];
+        for (int i = ligne - 1; i <= ligne + 1; i++) {
+            for (int j = colonne - 1; j <= colonne + 1; j++) {
+                if (caseExiste(i, j)){
+                if ((!plateau[i][j].tourPresente) || (plateau[i][j].tourPresente && plateau[i][j].estNoire == estNoir)) {
+                    tab[0] = i;
+                    tab[1] = j;
+                } else {
+                    tab[0] = -1;
+                    tab[1] = -1;
+                }
+            }
+            }
+        }
+        return tab;
     }
 
     /**
@@ -296,13 +340,13 @@ public class IATowa {
      * @return le nombre de pions à éliminer
      */
     int carreActivationPerso(Case[][] plateau, int ligne, int colonne, boolean estNoir, int hauteur) {
-        int nbPionsDetruits=0;
+        int nbPionsDetruits = 0;
         for (int i = ligne - 1; i <= ligne + 1; i += 2) {
             for (int j = colonne - 1; j <= colonne + 1; j += 2) {
                 if (caseExiste(i, j)) {
                     if ((plateau[i][j].tourPresente) && (plateau[i][j].estNoire != estNoir)) {
                         if (plateau[i][j].hauteur < hauteur) {
-                            nbPionsDetruits+=plateau[i][j].hauteur;
+                            nbPionsDetruits += plateau[i][j].hauteur;
                         }
                     }
                 }
@@ -386,7 +430,7 @@ public class IATowa {
      * @return vrai ssi la pose d'un pion sur cette case est autorisée dans ce niveau
      */
     boolean posePossible(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
-        if (plateau[ligne][colonne].hauteur < 4) {
+        if (plateau[ligne][colonne].hauteur < 3) {
             if (!plateau[ligne][colonne].tourPresente) {
                 return true;
             }
@@ -465,7 +509,7 @@ public class IATowa {
 
                 if (activationPossible(plateau, lig, col, joueurNoir)) {// si l'activation d'une tour de cette couleur est possible sur cette case
                     int hauteur = plateau[lig][col].hauteur;
-                    actions[nbActions] = activationPerso(plateau, lig, col,joueurNoir,hauteur);
+                    actions[nbActions] = activationPerso(plateau, lig, col, joueurNoir, hauteur);
                     nbActions++;
                 }
                 if (posePossible(plateau, lig, col, joueurNoir)) { // si la pose d'un pion de cette couleur est possible sur cette case
