@@ -162,8 +162,8 @@ public class IATowa {
     void activationEnnemie(Case[][] plateau, int ligne, int colonne, int ordreCourant) {
         boolean estNoir = ordreCourant == 1;
         int hauteur = plateau[ligne][colonne].hauteur;
-        parcoursGrilleEnnemi(plateau, ligne, 0, 0, 1, estNoir, hauteur);
-        parcoursGrilleEnnemi(plateau, 0, colonne, 1, 0, estNoir, hauteur);
+        parcoursLigneEnnemi(plateau, ligne, estNoir, hauteur);
+        parcoursColonneEnnemi(plateau, colonne, estNoir, hauteur);
         carreActivationEnnemi(plateau, ligne, colonne, estNoir, hauteur);
     }
 
@@ -285,12 +285,18 @@ public class IATowa {
      * @param incremCol incrément pour les colonnes
      * @return un tableau contenant la ligne, la colonne et la couleur (1 pour noir, 2 pour blanc)
      */
-    void parcoursGrilleEnnemi(Case[][] plateau, int ligDepart, int colDepart, int incremLig, int incremCol, boolean estNoir, int hauteur) {
-        while (caseExiste(ligDepart, colDepart)) {
-            if (plateau[ligDepart][colDepart].tourPresente && plateau[ligDepart][colDepart].hauteur < hauteur && plateau[ligDepart][colDepart].estNoire != estNoir) {
-                    detruireTour(plateau,ligDepart,colDepart);
-                    ligDepart += incremLig;
-                    colDepart += incremCol;
+    void parcoursLigneEnnemi(Case[][] plateau, int ligne, boolean estNoir, int hauteur) {
+        for (int i=0;i<TAILLE;i++) {
+            if (plateau[ligne][i].tourPresente && plateau[ligne][i].hauteur < hauteur && plateau[ligne][i].estNoire != estNoir) {
+                    detruireTour(plateau,ligne,i);
+            }
+        }
+    }
+    
+    void parcoursColonneEnnemi(Case[][] plateau, int colonne, boolean estNoir, int hauteur) {
+        for (int i= 0;i<TAILLE;i++) {
+            if (plateau[i][colonne].tourPresente && plateau[i][colonne].hauteur < hauteur && plateau[i][colonne].estNoire != estNoir) {
+                    detruireTour(plateau,i,colonne);
             }
         }
     }
