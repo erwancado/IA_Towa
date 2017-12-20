@@ -189,12 +189,9 @@ public class IATowa {
         Random rand = new Random();
         int iAction = rand.nextInt(nbActions);
         int pionsDetruits = 4;
+        if(nbToursJeu < 10){
         for (int i = 0; i < nbActions; i++) {
-            if (actionsPossibles[i].charAt(0) == 'A' && Character.getNumericValue(actionsPossibles[i].charAt(3)) > pionsDetruits) {
-                iAction = i;
-                pionsDetruits = Character.getNumericValue(actionsPossibles[i].charAt(3));
-                i = nbActions - 1;
-            } else if(actionsPossibles[i].charAt(0) == 'P' && actionsPossibles[i].charAt(3)==2){
+          if(actionsPossibles[i].charAt(0) == 'P' && actionsPossibles[i].charAt(3)=='2'){
                     iAction = i;
                     i = nbActions - 1;
                 }
@@ -205,6 +202,23 @@ public class IATowa {
                 }
             }
             }
+        } else {
+            for (int i = 0; i < nbActions; i++) {
+            if (actionsPossibles[i].charAt(0) == 'A' && actionsPossibles[i].charAt(3)!='0' && actionsPossibles[i].charAt(3)!='1' && actionsPossibles[i].charAt(3)!='2' ) {
+                iAction = i;
+                i = nbActions - 1;
+            } else if(actionsPossibles[i].charAt(0) == 'P' && actionsPossibles[i].charAt(3)=='2'){
+                    iAction = i;
+                    i = nbActions - 1;
+                }
+            else{
+                if(actionsPossibles[i].charAt(0) == 'P' && actionsPossibles[i].charAt(1) == poseTourAdjacent(plateau, estNoir)[0] && actionsPossibles[i].charAt(2) == poseTourAdjacent(plateau, estNoir)[1]){
+                    iAction=i;
+                    i = nbActions - 1;
+                }
+            }
+            }
+        }
         
         String action = actionsPossibles[iAction];
         grandOrdo.envoiCaractere(action.charAt(0));
