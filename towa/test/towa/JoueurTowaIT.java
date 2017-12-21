@@ -243,22 +243,22 @@ public class JoueurTowaIT {
         assertEquals(expResult, result);
     }
 
-    /**
-     * Test of parcoursGrille method, of class JoueurTowa.
-     */
-    @Test
-    public void testParcoursGrille() {
-        System.out.println("parcoursGrille");
-        Case[][] plateau = PLATEAUTEST;
-        int ligDepart = 0;
-        int colDepart = 0;
-        int incremLig = 0;
-        int incremCol = 1;
-        JoueurTowa instance = new JoueurTowa();
-        int expResult = 4;
-        int result = instance.parcoursGrille(plateau, ligDepart, colDepart, incremLig, incremCol);
-        assertEquals(expResult, result);
-    }
+//    /**
+//     * Test of parcoursGrille method, of class JoueurTowa.
+//     */
+//    @Test
+//    public void testParcoursGrille() {
+//        System.out.println("parcoursGrille");
+//        Case[][] plateau = PLATEAUTEST;
+//        int ligDepart = 0;
+//        int colDepart = 0;
+//        int incremLig = 0;
+//        int incremCol = 1;
+//        JoueurTowa instance = new JoueurTowa();
+//        int expResult = 4;
+//        int result = instance.parcoursGrille(plateau, ligDepart, colDepart, incremLig, incremCol);
+//        assertEquals(expResult, result);
+//    }
 
     /**
      * Test of cptKamikaze method, of class JoueurTowa.
@@ -516,6 +516,55 @@ public class JoueurTowaIT {
         JoueurTowa.main(args);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of carreActivationPerso method, of class JoueurTowa.
+     */
+    @Test
+    public void testCarreActivationPerso() {
+        System.out.println("carreActivationPerso");
+        Case[][] plateau = null;
+        int ligne = 0;
+        int colonne = 1;
+        boolean estNoir = false;
+        int hauteur = 4;
+        JoueurTowa instance = new JoueurTowa();
+        int expResult = 1;
+        int result = instance.carreActivationPerso(plateau, ligne, colonne, estNoir, hauteur);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of parcoursLignePerso method, of class JoueurTowa.
+     */
+    @Test
+    public void testParcoursLignePerso() {
+        System.out.println("parcoursLignePerso");
+        Case[][] plateau = PLATEAUTEST;
+        int ligne = 3;
+        boolean estNoir = false;
+        int hauteur = 4;
+        JoueurTowa instance = new JoueurTowa();
+        int expResult = 2;
+        int result = instance.parcoursLignePerso(plateau, ligne, estNoir, hauteur);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of parcoursColonnePerso method, of class JoueurTowa.
+     */
+    @Test
+    public void testParcoursColonnePerso() {
+        System.out.println("parcoursColonnePerso");
+        Case[][] plateau = PLATEAUTEST;
+        int colonne = 12;
+        boolean estNoir = false;
+        int hauteur = 4;
+        JoueurTowa instance = new JoueurTowa();
+        int expResult = 1;
+        int result = instance.parcoursColonnePerso(plateau, colonne, estNoir, hauteur);
+        assertEquals(expResult, result);
     }
     
 }
