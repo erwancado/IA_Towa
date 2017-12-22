@@ -147,8 +147,7 @@ public class IATowa {
      * @param plateau le plateau à mettre à jour
      * @param ligne la ligne de la case de pose ennemie
      * @param colonne la colonne de la case de pose ennemie
-     * @param ordreCourant l'ordre de jeu pour connaître la couleur du joueur
-     * ennemi.
+     * @param estNoir couleur du joueur selon l'ordre
      */
     void ajoutPose(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
         plateau[ligne][colonne].tourPresente = true;
@@ -161,6 +160,14 @@ public class IATowa {
         }
     }
 
+    /**
+     * Mise à jour du plateau suite à une activation de l'ennemi
+     * 
+     * @param plateau le plateau à mettre à jour
+     * @param ligne la ligne de la tour activée ennemie
+     * @param colonne la colonne de la tour activée ennemie
+     * @param estNoir couleur du joueur selon l'ordre
+     */
     void activationEnnemie(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
         int hauteur = plateau[ligne][colonne].hauteur;
         parcoursLigneEnnemi(plateau, ligne, estNoir, hauteur);
@@ -168,6 +175,16 @@ public class IATowa {
         carreActivationEnnemi(plateau, ligne, colonne, estNoir, hauteur);
     }
 
+    /**
+     * Action activation
+     * 
+     * @param plateau le plateau à mettre à jour
+     * @param ligne ligne de la case pouvant être activée
+     * @param colonne colonne de la case pouvant être activée 
+     * @param estNoir couleur du joueur selon l'ordre
+     * @param hauteur hauteur de la tour pouvant être activée
+     * @return 
+     */
     String activationPerso(Case[][] plateau, int ligne, int colonne, boolean estNoir, int hauteur) {
         String action = "A" // action = Activation
                 + Utils.numVersCarLigne(ligne) // convertit la ligne en lettre
@@ -291,17 +308,14 @@ public class IATowa {
     }
 
     /**
-     * Parcours une ligne ou une colonne en fonction de ses paramètres et
-     * renvoie la ligne et la colonne de la première tour rencontrée ainsi que
-     * sa couleur.
+     * Parcours la ligne de la tour pouvant être activée et
+     * renvoie le nombre de pions que cette activation pourrait détruire
      *
-     * @param plateau le plateau
-     * @param ligDepart indice de la ligne de départ
-     * @param colDepart indice de la colonne de départ
-     * @param incremLig incrément pour les lignes
-     * @param incremCol incrément pour les colonnes
-     * @return un tableau contenant la ligne, la colonne et la couleur (1 pour
-     * noir, 2 pour blanc)
+     * @param plateau le plateau à mettre à jour
+     * @param ligne indice de la ligne de la tour pouvant être activée
+     * @param estNoir couleur du joueur selon l'ordre
+     * @param hauteur hauteur de la tour pointée
+     * @return le nombre de pions pouvant être détruits
      */
     int parcoursLignePerso(Case[][] plateau, int ligne, boolean estNoir, int hauteur) {
         int nbPionsDetruits = 0;
@@ -313,6 +327,16 @@ public class IATowa {
         return nbPionsDetruits;
     }
 
+    /**
+     * Parcours la colonne de la tour pouvant être activée et renvoie
+     * le nombre de pions que cette activation pourrait détruire 
+     * 
+     * @param plateau le plateau à mettre à jour 
+     * @param colonne indice de la colonne de la tour pouvant être activée
+     * @param estNoir couleur du joueur selon l'ordre
+     * @param hauteur hauteur de la tour pointée 
+     * @return le nombre de pions pouvant être détruits
+     */
     int parcoursColonnePerso(Case[][] plateau, int colonne, boolean estNoir, int hauteur) {
         int nbPionsDetruits = 0;
         for (int i = 0; i < TAILLE; i++) {
@@ -324,17 +348,13 @@ public class IATowa {
     }
 
     /**
-     * Parcours une ligne ou une colonne en fonction de ses paramètres et
-     * renvoie la ligne et la colonne de la première tour rencontrée ainsi que
-     * sa couleur.
+     * Parcours la ligne de la tour activée ennemie et détruit toutes les 
+     * tours "amies" sur cette ligne 
      *
-     * @param plateau le plateau
-     * @param ligDepart indice de la ligne de départ
-     * @param colDepart indice de la colonne de départ
-     * @param incremLig incrément pour les lignes
-     * @param incremCol incrément pour les colonnes
-     * @return un tableau contenant la ligne, la colonne et la couleur (1 pour
-     * noir, 2 pour blanc)
+     * @param plateau le plateau à mettre à jour
+     * @param ligne indice de la ligne de la tour ennemie activée
+     * @param estNoir couleur du joueur selon l'ordre
+     * @param hauteur hauteur de la tour pointée
      */
     void parcoursLigneEnnemi(Case[][] plateau, int ligne, boolean estNoir, int hauteur) {
         for (int i = 0; i < TAILLE; i++) {
@@ -344,6 +364,15 @@ public class IATowa {
         }
     }
 
+    /**
+     * Parcours la colonne de la tour activée ennemie et détruit toutes les 
+     * tours "amies" sur cette colonne 
+     * 
+     * @param plateau le plateau à mettre à jour
+     * @param colonne indice de la colonne 
+     * @param estNoir couleur du joueur selon l'ordre
+     * @param hauteur hauteur de la tour pointée
+     */
     void parcoursColonneEnnemi(Case[][] plateau, int colonne, boolean estNoir, int hauteur) {
         for (int i = 0; i < TAILLE; i++) {
             if (plateau[i][colonne].tourPresente && plateau[i][colonne].hauteur < hauteur && plateau[i][colonne].estNoire != estNoir) {
