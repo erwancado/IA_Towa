@@ -269,6 +269,13 @@ public class IATowa {
         }
     }
 
+    /**
+     * Parcoure le tableau pour trouver une case de pose qui encerclera une tour ennemie de hauteur égale à 1
+     * et renvoie les coordonnées de cette case dans un tableau de 2 cases.
+     * @param plateau
+     * @param estNoir
+     * @return un tableau de 2 caractères : la ligne et la colonne de la case.
+     */
     char[] poseTourAdjacent(Case[][] plateau, boolean estNoir) {
         int[] tab = new int[2];
         char[] tabChar = new char[2];
@@ -289,6 +296,16 @@ public class IATowa {
         return tabChar;
     }
 
+    /**
+     * Parcoure le tableau afin de trouver une case libre, ou occupée par une de nos tours
+     * sur laquelle la pose est possible, autour de la case de coordonnées (ligne,colonne).
+     * @param plateau
+     * @param ligne
+     * @param colonne
+     * @param estNoir
+     * @return un tableau d'entiers contenant la ligne et la colonne de la case sur laquelle on peut poser 
+     * ou {-1,-1} si il n'y a pas de case de la sorte.
+     */
     int[] presenceTour(Case[][] plateau, int ligne, int colonne, boolean estNoir) {
         int[] tab = new int[2];
         for (int i = ligne - 1; i <= ligne + 1; i++) {
@@ -428,6 +445,12 @@ public class IATowa {
         }
     }
 
+    /**
+     * Retire du plateau la tour présente sur la case en (ligne,colonne)
+     * @param plateau
+     * @param ligne
+     * @param colonne 
+     */
     void detruireTour(Case[][] plateau, int ligne, int colonne) {
         plateau[ligne][colonne].tourPresente = false;
         plateau[ligne][colonne].hauteur = 0;
